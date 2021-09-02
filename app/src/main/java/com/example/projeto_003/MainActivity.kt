@@ -1,18 +1,18 @@
 package com.example.projeto_003
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.projeto_003.view.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import com.example.projeto_003.view.PatientFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, PatientFragment.newInstance())
+            .commitNow()
     }
 }
