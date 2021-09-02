@@ -23,11 +23,8 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
     }
 
     private lateinit var viewModel: PatientViewModel
-    private var selectedPatient: Patient? = null
 
     private val adapter = AdapterPatient {
-        selectedPatient = it
-        setValueToFields(it)
     }
 
     private val observerPatient = Observer<List<Patient>> {
@@ -42,54 +39,13 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
         viewModel.patient.observe(viewLifecycleOwner, observerPatient)
         viewModel.getAllPatient()
         settingRecyclerView()
-        settingForm()
 
 
-    }
-
-    private fun settingForm() {
-        binding.bottomNew.setOnClickListener {
-            binding.editNamePatient.let { edit ->
-                if (edit.text.isNotEmpty()) {
-                    Patient(name = edit.text.toString()).let {
-                        viewModel.inserPatient(it)
-                    }
-                }
-            }
-        }
-        binding.bottomDelet.setOnClickListener {
-            selectedPatient?.let {
-                viewModel.deletPatient(it)
-            }
-        }
-        binding.bottomEdit.setOnClickListener {
-            selectedPatient?.let {
-
-                binding.editNamePatient?.let { edit ->
-                    if (edit.text.isNotEmpty()) {
-                        Patient(
-                            id = it.id,
-                            name = edit.text.toString()
-                        ).let {
-                            viewModel.updatePatient(it)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     fun settingRecyclerView() {
         binding.recyclerViewPatient.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.recyclerViewPatient.adapter = adapter
-    }
-
-    fun setValueToFields(patient: Patient) {
-        binding.editAgePatient?.setText(patient.id)
-        binding.editIdPatient?.setText(patient.name)
-        binding.editNamePatient?.setText(patient.age)
-        binding.editSexPatient?.setText(patient.sex)
-
     }
 
 }
