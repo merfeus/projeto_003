@@ -1,7 +1,6 @@
 package com.example.projeto_003.database.dao
 
 import androidx.room.*
-import com.example.projeto_003.model.Patient
 import com.example.projeto_003.model.Specialist
 
 @Dao
@@ -14,8 +13,8 @@ interface SpecialistDAO {
     fun insert(list: List<Specialist>)
 
     @Delete
-    fun delete(patient: Specialist)
+    fun delete(specialist: Specialist)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(patient: Specialist)
+    fun update(specialist: Specialist)
 }

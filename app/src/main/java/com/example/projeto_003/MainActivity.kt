@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projeto_003.databinding.MainActivityBinding
 import com.example.projeto_003.utils.replaceFragment
+import com.example.projeto_003.view.DoctorFragment
 import com.example.projeto_003.view.PatientFragment
 import com.example.projeto_003.view.SpecialistFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_specialists -> {
                     replaceFragment(SpecialistFragment.newInstance())
+                }
+                R.id.nav_doctors -> {
+                    replaceFragment(DoctorFragment.newInstance())
                 }
             }
             true
