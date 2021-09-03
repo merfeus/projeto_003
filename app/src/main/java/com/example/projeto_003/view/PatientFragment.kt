@@ -25,6 +25,7 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
     private lateinit var viewModel: PatientViewModel
 
     private val adapter = AdapterPatient {
+
     }
 
     private val observerPatient = Observer<List<Patient>> {
