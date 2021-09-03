@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class Specialist(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "Specialist_id")
+    @ColumnInfo(name = "specialist_id")
     val id: Int = 0,
-    @ColumnInfo(name = "Specialist_name")
+    @ColumnInfo(name = "specialist_name")
     val name: String = "Other"
 )
