@@ -2,6 +2,8 @@ package com.example.projeto_003.view
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,9 +25,20 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
     }
 
     private lateinit var viewModel: PatientViewModel
+    private var selectedPatient: Patient? = null
 
     private val adapter = AdapterPatient {
+        selectedPatient = it
+        binding.editIdPatient.visibility = VISIBLE
+        binding.bottomNew.visibility = GONE
+        setValueToFields(it)
+    }
 
+    private fun setValueToFields(patient: Patient) {
+        binding.editIdPatient?.setText(patient.id.toString())
+        binding.editNamePatient?.setText(patient.name)
+        binding.editSexPatient?.setText(patient.gender)
+        binding.editAgePatient?.setText(patient.age.toString())
     }
 
     private val observerPatient = Observer<List<Patient>> {
@@ -40,8 +53,72 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
         viewModel.patient.observe(viewLifecycleOwner, observerPatient)
         viewModel.getAllPatient()
         settingRecyclerView()
+        settingForm()
 
 
+    }
+
+    private fun settingForm() {
+
+        binding.bottomNew.setOnClickListener {
+
+            val name = binding.editNamePatient
+            val age = binding.editAgePatient
+            val sex = binding.editSexPatient
+
+            if (name.text.isNotEmpty() && age.text.toString()
+                    .isNotEmpty() && sex.text.toString().isNotEmpty()
+            ) {
+                viewModel.insertPatient(
+                    Patient(
+                        name = name.text.toString(),
+                        age = age.text.toString().toInt(),
+                        gender = sex.text.toString()
+                    )
+                )
+                clearFields()
+            }
+
+            binding.bottomDelet.setOnClickListener {
+                selectedPatient?.let {
+                    viewModel.deletPatient(it)
+                    clearFields()
+                }
+            }
+
+            binding.bottomEdit.setOnClickListener {
+                selectedPatient?.let {
+
+                    val name = binding.editNamePatient
+                    val age = binding.editAgePatient
+                    val sex = binding.editSexPatient
+
+                    if (name.text.isNotEmpty() && age.text.toString()
+                            .isNotEmpty() && sex.text.toString().isNotEmpty()
+                    ) {
+                        viewModel.updatePatient(
+                            Patient(
+                                id = selectedPatient!!.id,
+                                name = name.text.toString(),
+                                age = age.text.toString().toInt(),
+                                gender = sex.text.toString()
+                            )
+                        )
+                        clearFields()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun clearFields() {
+        binding.editNamePatient?.setText("")
+        binding.editAgePatient?.setText("")
+        binding.editSexPatient?.setText("")
+        binding.editAgePatient?.setText("")
+        binding.editIdPatient?.setText("")
+        binding.editIdPatient.visibility = GONE
+        binding.bottomNew.visibility = VISIBLE
     }
 
     fun settingRecyclerView() {

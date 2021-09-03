@@ -1,6 +1,7 @@
 package com.example.projeto_003.database.dao
 
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.example.projeto_003.model.Patient
 
 @Dao

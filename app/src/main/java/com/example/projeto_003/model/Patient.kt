@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Patient(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "patient_id")
     val id: Int = 0,
     @ColumnInfo(name = "patient_name")
@@ -14,5 +14,5 @@ data class Patient(
     @ColumnInfo(name = "patient_age")
     val age: Int = 0,
     @ColumnInfo(name = "Patient_sex")
-    val sex: String = "Other"
+    val gender: String = "Other"
 )

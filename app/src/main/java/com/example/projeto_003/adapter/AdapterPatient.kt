@@ -46,6 +46,6 @@ class PatientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         binding.idTextView.text = patient.id.toString()
         binding.nameTextView.text = patient.name
         binding.ageTextView.text = patient.age.toString()
-        binding.sexTextView.text = patient.sex
+        binding.sexTextView.text = patient.gender
     }
 }
