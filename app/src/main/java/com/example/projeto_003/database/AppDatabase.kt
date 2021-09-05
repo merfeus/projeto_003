@@ -6,13 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.projeto_003.database.dao.DoctorDAO
 import com.example.projeto_003.database.dao.PatientDAO
+import com.example.projeto_003.database.dao.PlannerDAO
 import com.example.projeto_003.database.dao.SpecialistDAO
 import com.example.projeto_003.model.Doctor
 import com.example.projeto_003.model.Patient
+import com.example.projeto_003.model.Planner
 import com.example.projeto_003.model.Specialist
 
 @Database(
-    entities = [Patient::class, Specialist::class, Doctor::class],
+    entities = [Patient::class, Specialist::class, Doctor::class, Planner::class],
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -20,6 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun patientDAO(): PatientDAO
     abstract fun specialistDAO(): SpecialistDAO
     abstract fun doctorDAO(): DoctorDAO
+    abstract fun plannerDAO(): PlannerDAO
 
     companion object {
 

@@ -12,19 +12,19 @@ data class Planner(
 
 )
 
-data class PlannerPADOC(
+data class PlannerWithPADOC(
     @Embedded
     val planner: Planner,
 
     @Relation(
         parentColumn = "patientFK",
-        entityColumn = "p"
+        entityColumn = "patient_id"
     )
     val patient: Patient,
 
     @Relation(
-        parentColumn = "physicianFK",
-        entityColumn = "phy_id"
+        parentColumn = "doctorFK",
+        entityColumn = "doctor_id"
     )
-    val physician: Physician
+    val doctor: Doctor
 )

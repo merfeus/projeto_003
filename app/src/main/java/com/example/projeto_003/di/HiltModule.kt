@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.projeto_003.database.AppDatabase
 import com.example.projeto_003.database.dao.DoctorDAO
 import com.example.projeto_003.database.dao.PatientDAO
+import com.example.projeto_003.database.dao.PlannerDAO
 import com.example.projeto_003.database.dao.SpecialistDAO
 import com.example.projeto_003.respository.DoctorRepository
 import com.example.projeto_003.respository.PatientRepository
@@ -18,6 +19,8 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object HiltModule {
 
+    //Injected Repository
+
     @Provides
     fun providePatientRepository(@ApplicationContext context: Context): PatientRepository {
         return PatientRepository(providePatientDataBase(context))
@@ -28,10 +31,12 @@ object HiltModule {
         return SpecialistRepository(provideSpecialistDataBase(context))
     }
 
-//    @Provides
-//    fun providesDoctorRepository(@ApplicationContext context: Context) : DoctorRepository{
-//        return DoctorRepository(provideDoctorDataBase(context))
-//    }
+    @Provides
+    fun providesDoctorRepository(@ApplicationContext context: Context) : DoctorRepository{
+        return DoctorRepository(provideDoctorDataBase(context))
+    }
+
+    //Injected DAO
 
     @Provides
     fun providePatientDataBase(@ApplicationContext context: Context): PatientDAO {
@@ -46,5 +51,10 @@ object HiltModule {
     @Provides
     fun provideDoctorDataBase(@ApplicationContext context: Context) : DoctorDAO{
         return AppDatabase.getDatabase(context).doctorDAO()
+    }
+
+    @Provides
+    fun providePlannerDataBase(@ApplicationContext context: Context): PlannerDAO{
+        return AppDatabase.getDatabase(context).plannerDAO()
     }
 }

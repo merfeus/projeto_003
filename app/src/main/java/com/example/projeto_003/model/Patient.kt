@@ -13,6 +13,6 @@ data class Patient(
     val name: String,
     @ColumnInfo(name = "patient_age")
     val age: Int = 0,
-    @ColumnInfo(name = "Patient_sex")
+    @ColumnInfo(name = "patient_gender")
     val gender: String = "Other"
 )
