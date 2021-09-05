@@ -29,13 +29,11 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
 
     private val adapter = AdapterPatient {
         selectedPatient = it
-        binding.editIdPatient.visibility = VISIBLE
         binding.bottomNew.visibility = GONE
         setValueToFields(it)
     }
 
     private fun setValueToFields(patient: Patient) {
-        binding.editIdPatient?.setText(patient.id.toString())
         binding.editNamePatient?.setText(patient.name)
         binding.editSexPatient?.setText(patient.gender)
         binding.editAgePatient?.setText(patient.age.toString())
@@ -66,7 +64,7 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
             val age = binding.editAgePatient
             val sex = binding.editSexPatient
 
-            if (name.text.isNotEmpty() && age.text.toString()
+            if (name.editableText.isNotEmpty() && age.text.toString()
                     .isNotEmpty() && sex.text.toString().isNotEmpty()
             ) {
                 viewModel.insertPatient(
@@ -93,7 +91,7 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
                     val age = binding.editAgePatient
                     val sex = binding.editSexPatient
 
-                    if (name.text.isNotEmpty() && age.text.toString()
+                    if (name.editableText.isNotEmpty() && age.text.toString()
                             .isNotEmpty() && sex.text.toString().isNotEmpty()
                     ) {
                         viewModel.updatePatient(
@@ -116,8 +114,6 @@ class PatientFragment : Fragment(R.layout.patient_fragment) {
         binding.editAgePatient?.setText("")
         binding.editSexPatient?.setText("")
         binding.editAgePatient?.setText("")
-        binding.editIdPatient?.setText("")
-        binding.editIdPatient.visibility = GONE
         binding.bottomNew.visibility = VISIBLE
     }
 

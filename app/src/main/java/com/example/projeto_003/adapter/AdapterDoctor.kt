@@ -44,8 +44,8 @@ class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(doctorWithSpecialist: DoctorWithSpecialist) {
 
-        binding.nameTextView.text = doctorWithSpecialist.doctor?.name
-        binding.specialistDoctor.text = doctorWithSpecialist.specialist?.name
+        binding.nameTextView.text = "Name: ${doctorWithSpecialist.doctor?.name}"
+        binding.specialistDoctor.text = "Doctor's Specialty: ${doctorWithSpecialist.specialist?.name}"
     }
 
 }

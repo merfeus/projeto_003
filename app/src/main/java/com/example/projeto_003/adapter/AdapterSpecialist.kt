@@ -45,7 +45,7 @@ class SpecialistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(specialist: Specialist) {
 
-        binding.idTextView.text = specialist.id.toString()
-        binding.nameTextView.text = specialist.name
+        binding.idTextView.text = "ID: ${specialist.id.toString()}"
+        binding.nameTextView.text ="Name: ${specialist.name}"
     }
 }

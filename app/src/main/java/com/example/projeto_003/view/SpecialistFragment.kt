@@ -26,13 +26,11 @@ class SpecialistFragment : Fragment(R.layout.specialist_fragment) {
 
     private val adapter = AdapterSpecialist {
         selectedSpecialist = it
-        binding.editIdSpecialist.visibility = View.VISIBLE
         binding.bottomNew.visibility = View.GONE
         setValueToFields(it)
     }
 
     private fun setValueToFields(specialist: Specialist) {
-        binding.editIdSpecialist?.setText(specialist.id.toString())
         binding.editNameSpecialist?.setText(specialist.name)
     }
 
@@ -74,7 +72,7 @@ class SpecialistFragment : Fragment(R.layout.specialist_fragment) {
         binding.bottomEdit.setOnClickListener {
             selectedSpecialist?.let {
                 val name = binding.editNameSpecialist
-                if (name.text.isNotEmpty()) {
+                if (name.editableText.isNotEmpty()) {
                     viewModel.updateSpecialist(
                         Specialist(
                             name = name.text.toString(),
@@ -89,7 +87,6 @@ class SpecialistFragment : Fragment(R.layout.specialist_fragment) {
 
     private fun clearFields() {
         binding.editNameSpecialist?.setText("")
-        binding.editIdSpecialist?.setText("")
         binding.bottomNew.visibility = View.VISIBLE
     }
 

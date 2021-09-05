@@ -3,13 +3,13 @@ package com.example.projeto_003.view
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projeto_003.R
 import com.example.projeto_003.adapter.AdapterDoctor
-import com.example.projeto_003.adapter.AdapterSpecialist
 import com.example.projeto_003.databinding.DoctorFragmentBinding
 import com.example.projeto_003.model.Doctor
 import com.example.projeto_003.model.DoctorWithSpecialist
@@ -26,16 +26,14 @@ class DoctorFragment : Fragment(R.layout.doctor_fragment) {
 
     private lateinit var viewModel: DoctorViewModel
     private lateinit var binding: DoctorFragmentBinding
+    private lateinit var adapterSpinner: ArrayAdapter<String>
 
     private var selectedSpecialist: Specialist? = null
     private var selectedDoctor: DoctorWithSpecialist? = null
+
+
     private val adapter: AdapterDoctor = AdapterDoctor {
         setValueToFields(it)
-    }
-    private val adapterSpecialist = AdapterSpecialist{
-        selectedSpecialist = it
-        binding.editSpecialistDoctor.visibility = View.VISIBLE
-        binding.bottomNew.visibility = View.GONE
     }
 
     private val observerDoctor = Observer<List<DoctorWithSpecialist>> {
@@ -43,18 +41,21 @@ class DoctorFragment : Fragment(R.layout.doctor_fragment) {
     }
 
     private val observerSpecialist = Observer<List<Specialist>> {
-        adapterSpecialist.refresh(it)
+        val listOf = it.map { category ->
+            category.name
+        }
+        adapterSpinner.addAll(listOf)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(DoctorViewModel::class.java)
         binding = DoctorFragmentBinding.bind(view)
         setupRecyclerView()
-        setupForm()
-        startObserver()
+        startObservers()
         startViewModelFuns()
+        setupForm()
+        setupAutoComplete()
     }
 
     private fun startViewModelFuns() {
@@ -62,21 +63,43 @@ class DoctorFragment : Fragment(R.layout.doctor_fragment) {
         viewModel.getSpecialist()
     }
 
-    private fun startObserver() {
+    private fun startObservers() {
         viewModel.doctor.observe(viewLifecycleOwner, observerDoctor)
         viewModel.specialist.observe(viewLifecycleOwner, observerSpecialist)
     }
 
     private fun setupForm() {
 
-        binding.bottomNew.setOnClickListener {
-            val name = binding.editNameDoctor.text.toString()
+        binding.bottomNewDoctor.setOnClickListener {
+            val name = binding.editNameDoctor.editText?.text.toString()
             if (name.isNotEmpty() && selectedSpecialist != null) {
-                val doctor = Doctor(
-                    name = name,
-                    specialityFK = selectedSpecialist!!.id
+                viewModel.insertDoctor(
+                    Doctor(
+                        name = name,
+                        specialityFK = selectedSpecialist!!.id
+                    )
                 )
-                viewModel.insertDoctor(doctor = doctor)
+                clearFields()
+            }
+        }
+
+        binding.bottomDeletDoctor.setOnClickListener {
+            selectedDoctor?.doctor?.let {
+                viewModel.deletDoctor(it)
+            }
+            clearFields()
+        }
+
+        binding.bottomEditDoctor.setOnClickListener {
+            val name = binding.editNameDoctor.editText?.text
+            if (name.toString().isNotEmpty() && selectedSpecialist != null) {
+                viewModel.updateDoctor(
+                    Doctor(
+                        name = name.toString(),
+                        specialityFK = selectedSpecialist!!.id
+                    )
+                )
+                clearFields()
             }
         }
     }
@@ -88,13 +111,37 @@ class DoctorFragment : Fragment(R.layout.doctor_fragment) {
 
 
     fun setValueToFields(doctorWithSpecialist: DoctorWithSpecialist) {
-        binding.editNameDoctor?.setText(doctorWithSpecialist.doctor?.name)
-        binding.bottomNew.visibility = View.GONE
+        binding.editNameDoctor.editText?.setText(doctorWithSpecialist.doctor?.name)
+        binding.bottomNewDoctor.visibility = View.GONE
 
         selectedDoctor = doctorWithSpecialist
         selectedSpecialist = doctorWithSpecialist.specialist
     }
 
+
+    private fun setupAutoComplete() {
+        adapterSpinner =
+            ArrayAdapter<String>(requireContext(), R.layout.spinner_item_specialist)
+        val autoCompleteBrand: AutoCompleteTextView? =
+            binding.inputCategoryTextInputLayout.editText as? AutoCompleteTextView
+        autoCompleteBrand?.setAdapter(adapterSpinner)
+        autoCompleteBrand?.setOnItemClickListener { parent, view, position, id ->
+            val selected = parent.getItemAtPosition(position) as String
+            viewModel.specialist.value?.first { cat -> (cat.name.equals(selected, true)) }
+                ?.let {
+                    selectedSpecialist = it
+                }
+        }
+    }
+
+    fun clearFields() {
+        binding.editNameDoctor.editText?.setText("")
+        binding.inputCategoryTextInputLayout.editText?.setText("")
+        binding.bottomNewDoctor.visibility = View.VISIBLE
+
+        selectedSpecialist = null
+        selectedDoctor = null
+    }
 }
 
 
